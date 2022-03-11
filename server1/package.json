@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "dev:watch": "nodemon -L",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -12,6 +13,7 @@
   "dependencies": {
     "express": "^4.17.3",
     "nano": "^9.0.5",
+    "nodemon": "^2.0.15",
     "tough-cookie": "^4.0.0"
   }
 }

@@ -44,6 +44,8 @@ services:
       - VIRTUAL_PORT=3000
     ports:
       - "3000:3000"
+    volumes:
+      - ./server1:/usr/src/app
     depends_on:
       - couchdb
     networks:
