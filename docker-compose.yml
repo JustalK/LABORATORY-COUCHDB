@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  nginx:
+    image: jwilder/nginx-proxy
+    container_name: labo-nginx
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      kevin-network:
+  couchdb:
+    image: couchdb
+    container_name: labo-couchdb
+    restart: always
+    ports:
+      - "5984:5984"
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=test
+    volumes:
+        - ./couchdb/dbdata:/opt/couchdb/data
+    networks:
+      kevin-network:
+  initializer:
+    image: curlimages/curl
+    container_name: labo-initializer
+    deploy:
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      - couchdb
+    command: ["sh","-c","sleep 15 && curl -u admin:test -X PUT couchdb:5984/_users &&  curl -u admin:test -X PUT couchdb:5984/test"]
+    networks:
+      kevin-network:
+  server1:
+    build: ./server1
+    container_name: labo-server1
+    environment:
+      - VIRTUAL_HOST=api.server1.net
+      - VIRTUAL_PORT=3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - couchdb
+    networks:
+      kevin-network:
+networks:
+  kevin-network:
