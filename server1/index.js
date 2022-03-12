@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const bodyParser = require('body-parser')
 const port = 3000
 const couch = require('./dbs/couchdb');
 
@@ -8,6 +9,9 @@ async function asyncCall() {
   return response
 }
 asyncCall()
+
+app.use(bodyParser.json())
+app.use('/', require('./routes/test'))
 
 app.get('/', (req, res) => {
   res.send({
