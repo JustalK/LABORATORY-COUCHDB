@@ -22,6 +22,22 @@ router.get('/all', async (request, response) => {
   response.status(200).send(rsl)
 })
 
+// Get all object following a certain pattern
+// https://docs.couchdb.org/en/stable/api/database/find.html
+router.get('/all/selected', async (request, response) => {
+  // include doc give you the real document
+  const rsl = await testDB.find({
+    selector: {
+      "name": {"$regex": "whatever.*"}
+    },
+    fields: ["name", "_id"],
+    limit: 2,
+    skip: 1,
+    execution_stats: true
+  })
+  response.status(200).send(rsl)
+})
+
 // Get one object inside the couchdb
 router.get('/one/:id', async (request, response) => {
   const rsl = await testDB.get(request.params.id)
