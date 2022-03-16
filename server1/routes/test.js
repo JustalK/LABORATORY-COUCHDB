@@ -15,6 +15,15 @@ router.post('/create', async (request, response) => {
   response.status(200).send(rsl)
 })
 
+// Create indexes for test db
+router.get('/create/indexes', async (request, response) => {
+  const rsl = await testDB.createIndex({
+    index: { fields: ['name'] },
+    name: 'nameindex'
+  })
+  response.status(200).send(rsl)
+})
+
 // Get all object inside the couchdb
 router.get('/all', async (request, response) => {
   // include doc give you the real document
@@ -33,7 +42,8 @@ router.get('/all/selected', async (request, response) => {
     fields: ["name", "_id"],
     limit: 2,
     skip: 1,
-    execution_stats: true
+    execution_stats: true,
+    use_index: "_design/nameindex"
   })
   response.status(200).send(rsl)
 })
