@@ -11,15 +11,16 @@ const router = express.Router()
 
 // Create an object inside the couchdb
 router.post('/create', async (request, response) => {
-  const rsl = await testDB.insert({ name: request.body.name })
+  const rsl = await testDB.insert({ name: request.body.name }, { ddoc: "nameindex" })
   response.status(200).send(rsl)
 })
 
-// Create indexes for test db
+// Create the index with a ddoc which can be use after in the selected
 router.get('/create/indexes', async (request, response) => {
   const rsl = await testDB.createIndex({
     index: { fields: ['name'] },
-    name: 'nameindex'
+    ddoc: 'namei',
+    name: 'namei'
   })
   response.status(200).send(rsl)
 })
@@ -43,7 +44,7 @@ router.get('/all/selected', async (request, response) => {
     limit: 2,
     skip: 1,
     execution_stats: true,
-    use_index: "_design/nameindex"
+    use_index: "_design/namei"
   })
   response.status(200).send(rsl)
 })
