@@ -12,6 +12,7 @@ asyncCall()
 
 app.use(bodyParser.json())
 app.use('/', require('./routes/test'))
+app.use('/view', require('./routes/view'))
 
 app.get('/', (req, res) => {
   res.send({
