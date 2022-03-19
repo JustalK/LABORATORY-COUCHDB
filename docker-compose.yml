@@ -36,6 +36,16 @@ services:
     command: ["sh","-c","sleep 15 && curl -u admin:test -X PUT couchdb:5984/_users &&  curl -u admin:test -X PUT couchdb:5984/test"]
     networks:
       kevin-network:
+  seeder:
+    image: ubuntu:latest
+    container_name: labo-seeder
+    volumes:
+        - ./couchdb/seeds/books:/books
+    depends_on:
+      - couchdb
+    command: ["sh","-c","books/seed.sh --username=admin --password=test --url=http://couchdb:5984"]
+    networks:
+      kevin-network:
   server1:
     build: ./server1
     container_name: labo-server1

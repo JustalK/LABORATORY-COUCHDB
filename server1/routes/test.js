@@ -7,6 +7,7 @@
 const express = require('express')
 const couch = require('../dbs/couchdb');
 const testDB = couch.db.use('test');
+const booksDB = couch.db.use('bookshelf_db');
 const router = express.Router()
 
 // Create an object inside the couchdb
@@ -29,6 +30,13 @@ router.get('/create/indexes', async (request, response) => {
 router.get('/all', async (request, response) => {
   // include doc give you the real document
   const rsl = await testDB.list({include_docs: true})
+  response.status(200).send(rsl)
+})
+
+// Get all object inside the couchdb
+router.get('/all2', async (request, response) => {
+  // include doc give you the real document
+  const rsl = await booksDB.list({include_docs: true})
   response.status(200).send(rsl)
 })
 
