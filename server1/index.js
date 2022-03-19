@@ -13,6 +13,7 @@ asyncCall()
 app.use(bodyParser.json())
 app.use('/', require('./routes/test'))
 app.use('/view', require('./routes/view'))
+app.use('/book', require('./routes/book'))
 
 app.get('/', (req, res) => {
   res.send({

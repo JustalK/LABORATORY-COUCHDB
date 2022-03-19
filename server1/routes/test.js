@@ -7,7 +7,7 @@
 const express = require('express')
 const couch = require('../dbs/couchdb');
 const testDB = couch.db.use('test');
-const booksDB = couch.db.use('bookshelf_db');
+const booksDB = couch.db.use('books');
 const router = express.Router()
 
 // Create an object inside the couchdb
