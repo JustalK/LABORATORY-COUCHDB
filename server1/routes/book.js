@@ -23,4 +23,34 @@ router.get('/all/selected', async (request, response) => {
   response.status(200).send(body)
 })
 
+// Create an object inside the couchdb
+router.post('/create', async (request, response) => {
+  booksDB.insert(
+    { views:
+      {
+        all_books:
+        {
+          map: function(doc) {
+            emit([doc.title], doc._id);
+          }
+        },
+        book_restriction:
+        {
+          map: function(doc) {
+            if (doc.title === "Gregor and the Prophecy of Bane") {
+              emit([doc.title], doc._id);
+            }
+          }
+        }
+      }
+    }, '_design/books_all');
+  response.status(200).send(true)
+})
+
+router.get('/all/restricted', async (request, response) => {
+  const body = await booksDB.view('books_all', 'book_restriction')
+  response.status(200).send(body)
+})
+
+
 module.exports = router
