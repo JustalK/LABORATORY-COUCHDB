@@ -41,14 +41,28 @@ router.post('/create', async (request, response) => {
               emit([doc.title], doc._id);
             }
           }
+        },
+        book_count_js:
+        {
+          map: function(doc) {
+            if (doc.title === "Gregor and the Prophecy of Bane") {
+              emit([doc.title], doc._id);
+            }
+          },
+          reduce: '_count'
         }
       }
-    }, '_design/books_all');
+    }, '_design/books_all4');
   response.status(200).send(true)
 })
 
 router.get('/all/restricted', async (request, response) => {
   const body = await booksDB.view('books_all', 'book_restriction')
+  response.status(200).send(body)
+})
+
+router.get('/all/count', async (request, response) => {
+  const body = await booksDB.view('books_all4', 'book_count_js')
   response.status(200).send(body)
 })
 
